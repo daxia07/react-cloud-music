@@ -10,14 +10,14 @@ import {
   changeFullScreen,
   changeSpeed
 } from "./store/actionCreators";
-import { isEmptyObject, shuffle, findIndex, getSongUrl } from "../../api/utils";
+import { isEmptyObject, shuffle, findIndex } from "../../api/utils";
 import PlayList from "./play-list/index";
 import Toast from "./../../baseUI/toast/index";
 import Lyric from "../../api/lyric-parser";
 import MiniPlayer from "./mini-player";
 import NormalPlayer from "./normal-player";
 import { playMode } from "./../../api/config";
-import { getLyricRequest } from "./../../api/request";
+import { getLyricRequest, getSongUrl } from "./../../api/request";
 
 function Player(props) {
   const [currentTime, setCurrentTime] = useState(0);
@@ -76,7 +76,9 @@ function Player(props) {
     changeCurrentDispatch(current);
     setPreSong(current);
     setPlayingLyric("");
-    audioRef.current.src = getSongUrl(current.id);
+    // ref to getLyric
+    getSong(current.id);
+    // audioRef.current.src = getSongUrl(current.id);
     audioRef.current.autoplay = true;
     audioRef.current.playbackRate = speed;
     togglePlayingDispatch(true);
@@ -104,6 +106,26 @@ function Player(props) {
     if(!currentLyric.current)return;
     currentLineNum.current = lineNum;
     setPlayingLyric(txt);
+  };
+
+  const getSong = id => {
+    let songUrl = "";
+    setTimeout(() => {
+      songReady.current = true;
+    }, 3000);
+    getSongUrl(id)
+        .then(data => {
+          songUrl = data.data[0].url;
+          if(!songUrl) {
+            audioRef.current.src = null;
+            return;
+          }
+          audioRef.current.src = songUrl;
+        })
+        .catch(() => {
+          audioRef.current.src = "";
+          songReady.current = true;
+        });
   };
 
   const getLyric = id => {

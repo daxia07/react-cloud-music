@@ -46,6 +46,10 @@ export const getSongDetailRequest = id => {
   return axiosInstance.get(`/song/detail?ids=${id}`);
 };
 
+export const getSongUrl = async id => {
+  return axiosInstance.get(`/song/url?id=${id}`);
+}
+
 export const getLyricRequest = id => {
   return axiosInstance.get(`/lyric?id=${id}`);
 };
