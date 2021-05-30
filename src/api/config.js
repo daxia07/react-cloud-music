@@ -1,10 +1,10 @@
 import axios from "axios";
 
-const {REACT_APP_BASE_URL} = process.env;
+const {REACT_APP_BASE_URL, REACT_APP_CORS} = process.env;
 
 // axios的实例及拦截器配置
 const axiosInstance = axios.create({
-  baseURL: REACT_APP_BASE_URL
+  baseURL: `${REACT_APP_CORS}${REACT_APP_BASE_URL}`
 });
 
 axiosInstance.interceptors.response.use(
