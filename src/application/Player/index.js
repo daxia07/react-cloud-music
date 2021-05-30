@@ -19,6 +19,8 @@ import NormalPlayer from "./normal-player";
 import { playMode } from "./../../api/config";
 import { getLyricRequest, getSongUrl } from "./../../api/request";
 
+const {REACT_APP_CORS} = process.env;
+
 function Player(props) {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -120,7 +122,7 @@ function Player(props) {
             audioRef.current.src = null;
             return;
           }
-          audioRef.current.src = songUrl;
+          audioRef.current.src = `${REACT_APP_CORS}${songUrl}`;
         })
         .catch(() => {
           audioRef.current.src = "";
